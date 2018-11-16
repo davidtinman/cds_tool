@@ -27,8 +27,7 @@
         $.when(patient.api.search({type: "Observation", query: {code: 'LA17661-2'}, count: 10}))
             .done(function (obsSearchResults) {
                 obsSearchResults.data.entry.forEach(function (obs) {
-                    var obsRow = "<tr><td>" + obs.category.coding.display + "</td>" + "<td>" + 
-                    obs.resource.effectiveDateTime + "</td>" + "<td>" +
+                    var obsRow = "<tr><td>" + obs.resource.effectiveDateTime + "</td>" + "<td>" +
                         obs.resource.valueBoolean + "</td></tr>"
                     $("#obsTable").append(obsRow);
                 });
