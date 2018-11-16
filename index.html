@@ -28,7 +28,7 @@
             .done(function (obsSearchResults) {
                 obsSearchResults.data.entry.forEach(function (obs) {
                     var obsRow = "<tr><td>" + obs.resource.effectiveDateTime + "</td>" + "<td>" +
-                        obs.resource.valueQuantity.value + obs.resource.valueBoolean + "</td></tr>"
+                        obs.resource.valueBoolean + "</td></tr>"
                     $("#obsTable").append(obsRow);
                 });
             });
