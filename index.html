@@ -27,11 +27,20 @@
         $.when(patient.api.search({type: "Observation", query: {code: 'LA17661-2'}, count: 10}))
             .done(function (obsSearchResults) {
                 obsSearchResults.data.entry.forEach(function (obs) {
-                    var obsRow = "<tr><td>" + obs.resource.effectiveDateTime + "</td>" + "<td>" +
+                    var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" + "<td>" +
                         obs.resource.valueBoolean + "</td></tr>"
                     $("#obsTable").append(obsRow);
                 });
             });
+        $.when(patient.api.search({type: "Observation", query: {code: '70315-7'}, count: 10}))
+            .done(function (obsSearchResults) {
+                obsSearchResults.data.entry.forEach(function (obs) {
+                    var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" + "<td>" +
+                        obs.resource.valueBoolean + "</td></tr>"
+                    $("#obsTable").append(obsRow);
+                });
+            });
+
     });
 </script>
 <h2 id="patientName"></h2>
