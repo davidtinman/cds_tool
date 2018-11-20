@@ -3,7 +3,12 @@
     <script src="node_modules/fhirclient/fhir-client.js"></script>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <style>
-        table, th, td {
+        table {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+
+        th, td {
             border: 1px solid black;
             border-collapse: collapse;
         }
@@ -11,6 +16,10 @@
         th, td {
             padding: 5px;
             text-align: left;
+        }
+        caption {
+            font-weight: bold;
+            border: 1px solid black;
         }
     </style>
 </head>
@@ -27,18 +36,36 @@
         $.when(patient.api.search({type: "Observation", query: {code: 'LA17661-2'}, count: 10}))
             .done(function (obsSearchResults) {
                 obsSearchResults.data.entry.forEach(function (obs) {
-                    var obsRow = "<tr><td>" + obs.resource.effectiveDateTime + "</td>" + "<td>" +
-                        obs.resource.valueBoolean + "</td></tr>"
-                    $("#Dysuria").append(obsRow);
+                    var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" + "<td>" +
+                        obs.resource.valueBoolean + "</td>" + "<td>" + obs.resource.effectiveDateTime + "</td></tr>"
+                    $("#obsTable").append(obsRow);
                 });
             });
+        $.when(patient.api.search({type: "Observation", query: {code: '70315-7'}, count: 10}))
+            .done(function (obsSearchResults) {
+                obsSearchResults.data.entry.forEach(function (obs) {
+                    var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" + "<td>" +
+                        obs.resource.valueBoolean + "</td>" + "<td>" + obs.resource.effectiveDateTime + "</td></tr>"
+                    $("#obsTable").append(obsRow);
+                });
+            });
+        $.when(patient.api.search({type: "Observation", query: {code: 'LA15468-4'}, count: 10}))
+            .done(function (obsSearchResults) {
+                obsSearchResults.data.entry.forEach(function (obs) {
+                    var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" + "<td>" +
+                        obs.resource.valueBoolean + "</td>" + "<td>" + obs.resource.effectivePeriod.start +
+                        obs.resource.effectivePeriod.end + "</td></tr>"
+                    $("#obsTable").append(obsRow);
+                });
+            });
+
     });
 </script>
 <h2 id="patientName"></h2>
 <div class="form-check">
   <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
   <label class="form-check-label" for="defaultCheck1">
-    Urinary Symptoms (Dysuria, Urgency, Frequency)
+    Lower Urinary Symptoms (Dysuria, Urgency, Frequency)
   </label>
 </div>
 <div class="form-check">
@@ -59,10 +86,12 @@
     Acute delirium (without alternate explanation)
   </label>
 </div>
-<table id="Dysuria">
+<table id="obsTable">
+    <caption>Most Recent eHR Findings</caption>
     <tr>
-        <th>Date</th>
+        <th>Finding</th>
         <th>Value</th>
+        <th>Date</th>
     </tr>
 </table>
 </body>
