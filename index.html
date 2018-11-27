@@ -33,20 +33,13 @@
     <![endif]-->
     <style>
         table {
-          border: 1px solid black;
+          border: 4px solid black;
           border-collapse: collapse;
         }
-        caption {
-            font-weight: bold;
-            border: 1px solid black;
-            align: top;
-        }
         th, td {
-            border: 1px solid black;
+            border: 2px solid black;
             border-collapse: collapse;
-        }
-        th, td {
-            padding: 5px;
+            padding: 15px;
             text-align: left;
         }
     </style>
@@ -163,8 +156,8 @@
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
         <h1 id="patientName"></h1>
-        <table id="obsTable">
-            <tr>
+        <table id="obsTable" width="100%" style="margin: 0px;">
+            <tr height="45">
               <th>Exam</th>
               <th>Value</th>
               <th>Date</th>
