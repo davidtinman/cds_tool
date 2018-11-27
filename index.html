@@ -1,0 +1,147 @@
+<html>
+    <head>
+        <script src="node_modules/fhirclient/fhir-client.js"></script>
+        <script src="node_modules/jquery/dist/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <style>
+            table {
+              border: 1px solid black;
+              border-collapse: collapse;
+              float: left; font-size: 10;
+            }
+            caption {
+                font-weight: bold;
+                border: 1px solid black;
+                align: top;
+            }
+            th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+
+            th, td {
+                padding: 5px;
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            FHIR.oauth2.ready(function (fhirClient) {
+                var patient = fhirClient.patient;
+                $.when(patient.read())
+                    .done(function (p) {
+                        var name = p.name[0];
+                        var formattedName = name.given[0] + " " + name.family;
+                        $("#patientName").text(formattedName);
+                    });
+                $.when(patient.api.search({type: "Observation", query: {code: 'LA17661-2'}, count: 10}))
+                    .done(function (obsSearchResults) {
+                        obsSearchResults.data.entry.forEach(function (obs) {
+                            var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" + "<td>" +
+                                obs.resource.valueBoolean + "</td>" + "<td>" + obs.resource.effectiveDateTime + "</td></tr>"
+                            $("#obsTable").append(obsRow);
+                        });
+                    });
+                $.when(patient.api.search({type: "Observation", query: {code: '70315-7'}, count: 10}))
+                    .done(function (obsSearchResults) {
+                        obsSearchResults.data.entry.forEach(function (obs) {
+                            var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" + "<td>" +
+                                obs.resource.valueBoolean + "</td>" + "<td>" + obs.resource.effectiveDateTime + "</td></tr>"
+                            $("#obsTable").append(obsRow);
+                        });
+                    });
+                $.when(patient.api.search({type: "Observation", query: {code: 'LA15468-4'}, count: 10}))
+                    .done(function (obsSearchResults) {
+                        obsSearchResults.data.entry.forEach(function (obs) {
+                            var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" + "<td>" +
+                                obs.resource.valueBoolean + "</td>" + "<td>" + obs.resource.effectivePeriod.start + "\n" +
+                                obs.resource.effectivePeriod.end + "</td></tr>"
+                            $("#obsTable").append(obsRow);
+                        });
+                    });
+            });
+        </script>
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <p><br>Let's Reduce Ordering for Asymptomatic Bacteriuria!</p>
+                    <h2 id="patientName"></h2>
+                    <h6>The table below displays recent observations from Patient's chart. Please review before submitting order.</h6>
+                    <caption>Most Recent eHR Findings</caption>
+                    <table id="obsTable">
+                        <tr>
+                          <th>Finding</th>
+                          <th>Value</th>
+                          <th>Date</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-7">
+                    <h1>Recommended Urine Culture Ordering Criteria</h1>
+                    <h6>Please select the patient's symptoms from the following checklist:</h6>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>FYI!</strong> Urine cultures should only be ordered in the presence of signs or symptoms likely related to a UTI.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="../" onsubmit="return checkCheckBoxes(this);">
+                        <p><input type="CHECKBOX" name="CHECKBOX_1" value="Urinary Symptoms (Dysuria, Urgency, Frequency)"> Urinary Symptoms (Dysuria, Urgency, Frequency)</p>
+                        <p><input type="CHECKBOX" name="CHECKBOX_2" value="Suprapubic pain or tenderness"> Suprapubic pain or tenderness</p>
+                        <p><input type="CHECKBOX" name="CHECKBOX_3" value="Temperature > 38C (without alternate explanation)"> Temperature > 38C (without alternate explanation)</p>
+                        <p><input type="CHECKBOX" name="CHECKBOX_4" value="Rigors (without alternate explanation)"> Rigors (without alternate explanation)</p>
+                        <p><input type="CHECKBOX" name="CHECKBOX_5" value="Hematuria (without alternate explanation)"> Hematuria (without alternate explanation)</p>
+                        <p><input type="CHECKBOX" name="CHECKBOX_6" value="Acute delirium (without alternate explanation)"> Acute delirium (without alternate explanation)</p>
+                        <p><input type="CHECKBOX" name="CHECKBOX_7" value="SIRS Criteria >= 2 (if no other explanation)"> SIRS Criteria >= 2 (if no other explanation)</p>
+                        <p><input type="CHECKBOX" name="CHECKBOX_8" value="SIRS Criteria >=2 + vasopressers (septic shock)"> SIRS Criteria >=2 + vasopressers (septic shock)</p>
+                        <p><div class="form-check">
+                        <input class="form-check-input" type="CHECKBOX" name=CHECKBOX_9 value="" id="defaultCheck1">
+                        <label class="form-check-label" for="defaultCheck1">
+                          <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="basic-addon1">Other</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Please Specify" aria-label="Please Specify" aria-describedby="basic-addon1">
+                          </div>
+                         </label>
+                         </div>
+                        <p><input type="SUBMIT" class="btn btn-primary" value="Sign Order"></p>
+                    </form>
+
+<script type="text/javascript" language="JavaScript">
+<!--
+function checkCheckBoxes(theForm) {
+    if (
+    theForm.CHECKBOX_1.checked == false &&
+    theForm.CHECKBOX_2.checked == false &&
+    theForm.CHECKBOX_3.checked == false &&
+    theForm.CHECKBOX_4.checked == false &&
+    theForm.CHECKBOX_5.checked == false &&
+    theForm.CHECKBOX_6.checked == false &&
+    theForm.CHECKBOX_7.checked == false &&
+    theForm.CHECKBOX_8.checked == false
+    )
+    {
+        alert ('You must select at least one to place the order.');
+        return false;
+    } else {
+        alert ('Your order has been successfully placed.');
+        return true;
+    }
+}
+//-->
+</script>
+
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    </body>
+</html>
