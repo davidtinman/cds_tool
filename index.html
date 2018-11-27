@@ -147,6 +147,15 @@
                       $("#obsTable").append(obsRow);
                   });
               });
+          $.when(patient.api.search({type: "Observation", query: {code: '5778-6'}, count: 10}))
+              .done(function (obsSearchResults) {
+                  obsSearchResults.data.entry.forEach(function (obs) {
+                      var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" +
+                          "<td>" + obs.resource.valueString + "</td>" +
+                          "<td>" + obs.resource.effectiveDateTime + "</td></tr>"
+                      $("#obsTable").append(obsRow);
+                  });
+              });
         });
     </script>
     <div class="container">
@@ -161,12 +170,13 @@
               <th>Date</th>
             </tr>
         </table>
-
+<!--
         <p>
           <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
         </p>
-      </div>
 
+      </div>
+-->
     </div> <!-- /container -->
 
 
