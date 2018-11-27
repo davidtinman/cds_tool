@@ -54,7 +54,7 @@
                     .done(function (obsSearchResults) {
                         obsSearchResults.data.entry.forEach(function (obs) {
                             var obsRow = "<tr><td>" + obs.resource.code.coding[0].display + "</td>" + "<td>" +
-                                obs.resource.valueBoolean + "</td>" + "<td>" + obs.resource.effectivePeriod.start +
+                                obs.resource.valueBoolean + "</td>" + "<td>" + obs.resource.effectivePeriod.start + "\n" +
                                 obs.resource.effectivePeriod.end + "</td></tr>"
                             $("#obsTable").append(obsRow);
                         });
