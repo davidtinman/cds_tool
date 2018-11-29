@@ -64,10 +64,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-4">
-                    <p><br>Let's Reduce Ordering for Asymptomatic Bacteriuria!</p>
+                    <p><br>Asymptomatic Bacteriuria</p>
                     <h2 id="patientName"></h2>
-                    <h6>The table below displays recent observations from Patient's chart. Please review before submitting order.</h6>
-                    <caption>Most Recent eHR Findings</caption>
+                    <caption>Patient Findings</caption>
                     <table id="obsTable">
                         <tr>
                           <th>Finding</th>
@@ -86,8 +85,8 @@
                             </button>
                         </div>
                         <form action="../" onsubmit="return checkCheckBoxes(this);">
-                        <p><input type="CHECKBOX" name="CHECKBOX_1" value="Urinary Symptoms (Dysuria, Urgency, Frequency)"> Urinary Symptoms (Dysuria, Urgency, Frequency)</p>
-                        <p><input type="CHECKBOX" name="CHECKBOX_2" value="Suprapubic pain or tenderness"> Suprapubic pain or tenderness</p>
+                        <p><input type="CHECKBOX" class="onoffswitch-checkbox" id="inline" checked name="CHECKBOX_1" value="Urinary Symptoms (Dysuria, Urgency, Frequency)"> Urinary Symptoms (Dysuria, Urgency, Frequency)</p>
+                        <p><input type="CHECKBOX" class="onoffswitch-checkbox" id="inline" checked name="CHECKBOX_2" value="Suprapubic pain or tenderness"> Suprapubic pain or tenderness</p>
                         <p><input type="CHECKBOX" name="CHECKBOX_3" value="Temperature > 38C (without alternate explanation)"> Temperature > 38C (without alternate explanation)</p>
                         <p><input type="CHECKBOX" name="CHECKBOX_4" value="Rigors (without alternate explanation)"> Rigors (without alternate explanation)</p>
                         <p><input type="CHECKBOX" name="CHECKBOX_5" value="Hematuria (without alternate explanation)"> Hematuria (without alternate explanation)</p>
@@ -127,7 +126,7 @@ function checkCheckBoxes(theForm) {
         return false;
     } else {
         alert ('Your order has been successfully placed.');
-        return document.location.href = "ehr.html";
+        document.location.href = "ehr.html";
     }
 }
 //-->
